@@ -1,6 +1,6 @@
 QuickJson
 ---------
-java 操作json框架
+Java 操作json框架
 
 ```Java
 String json = "{\"array\":[1,2,3],\"boolean\":true,\"null\":null,\"number\":123,\"object\":{\"a\":\"b\",\"c\":\"d\",\"e\":\"f\"},\"string\":\"Hello World\"}";
