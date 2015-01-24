@@ -6,32 +6,32 @@ import java.util.regex.Pattern;
 
 public class CaseUtils {
 	public static Integer intValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.intValue();
 	}
 
 	public static Long longValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.longValue();
 	}
 
 	public static Short shortValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.shortValue();
 	}
 
 	public static Float floatValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.floatValue();
 	}
 
 	public static Double doubleValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.doubleValue();
 	}
 
 	public static Byte byteValue(Object value) {
-		Number number = _caseNumber(value);
+		Number number = CaseUtils.caseNumber(value);
 		return null == number ? null : number.byteValue();
 	}
 
@@ -60,7 +60,7 @@ public class CaseUtils {
 		if (null == value || null == clazz || clazz.isInterface())
 			return null;
 		Method[] methods = clazz.getMethods();
-		T result = _obtain(clazz);
+		T result = obtain(clazz);
 		for (Method method : methods) {
 			if (!method.getName().startsWith("set") || method.getParameterTypes().length > 1)
 				continue;
@@ -69,7 +69,7 @@ public class CaseUtils {
 				continue;
 			Class<?> targetClazz = method.getParameterTypes()[0];
 			try {
-				Method method2 = CaseUtils.class.getMethod(_caseMethod(targetClazz), Object.class);
+				Method method2 = CaseUtils.class.getMethod(caseMethod(targetClazz), Object.class);
 				if (null == method2)
 					continue;
 				Object args = method2.invoke(null, value.get(k));
@@ -87,7 +87,7 @@ public class CaseUtils {
 		return null != clazz && (Number.class.isAssignableFrom(clazz) || Pattern.matches("^(java\\.lang\\.)?([ilfsSdbBcC](nt|ong|loat|hort|ouble|oolean|yte|har(acter)?|tring))$", clazz.getName()));
 	}
 
-	private static Number _caseNumber(Object value) {
+	private static Number caseNumber(Object value) {
 		if (null != value && isPrimitive(value.getClass())) {
 			Matcher matcher = Pattern.compile("[0-9\\.]+").matcher(value.toString());
 			if (matcher.find()) {
@@ -97,7 +97,7 @@ public class CaseUtils {
 		return null;
 	}
 
-	private static String _caseMethod(Class<?> clazz) {
+	private static String caseMethod(Class<?> clazz) {
 		if (isPrimitive(clazz)) {
 			String temp = clazz.getSimpleName();
 			if (temp.equals("Integer")) {
@@ -110,7 +110,7 @@ public class CaseUtils {
 		return null;
 	}
 
-	private static <T extends Object> T _obtain(Class<T> clazz) {
+	private static <T extends Object> T obtain(Class<T> clazz) {
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {

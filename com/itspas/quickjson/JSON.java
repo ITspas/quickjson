@@ -11,21 +11,21 @@ import java.util.Stack;
 
 public class JSON {
 	public static Object parse(String text) {
-		return _isEmtry(text) ? null : _parseJSON(text);
+		return isEmtry(text) ? null : parseJSON(text);
 	}
 
 	public static <T extends Object> T parse(String text, Class<T> clazz) {
-		if (null == text || text.isEmpty() || null == clazz || clazz.isInterface() || !_isJSONObject(text))
+		if (null == text || text.isEmpty() || null == clazz || clazz.isInterface() || !isJSONObject(text))
 			return null;
 		return CaseUtils.objectValue(parseJSONObject(text), clazz);
 	}
 
 	public static JSONArray parseJSONArray(String text) {
-		return (_isEmtry(text) || !_isJSONArray(text)) ? null : JSONArray.class.cast(_parseJSON(text));
+		return (isEmtry(text) || !isJSONArray(text)) ? null : JSONArray.class.cast(parseJSON(text));
 	}
 
 	public static JSONObject parseJSONObject(String text) {
-		return (_isEmtry(text) || !_isJSONObject(text)) ? null : JSONObject.class.cast(_parseJSON(text));
+		return (isEmtry(text) || !isJSONObject(text)) ? null : JSONObject.class.cast(parseJSON(text));
 	}
 
 	public static String toJSONString(Object object) {
@@ -34,15 +34,15 @@ public class JSON {
 		if (CaseUtils.isPrimitive(object.getClass())) {
 			return String.class.isInstance(object) ? String.format("\"%s\"", object.toString()) : object.toString();
 		} else if (object.getClass().isArray() || Collection.class.isInstance(object)) {
-			return _toJSONStringArray(object);
+			return toJSONStringArray(object);
 		} else if (Map.class.isInstance(object)) {
-			return _toJSONStringMap(object);
+			return toJSONStringMap(object);
 		} else {
-			return _toJSONStringPojo(object);
+			return toJSONStringPojo(object);
 		}
 	}
 
-	private static String _toJSONStringMap(Object object) {
+	private static String toJSONStringMap(Object object) {
 		StringBuilder builder = new StringBuilder("{");
 		Map<?, ?> map = Map.class.cast(object);
 		Iterator<?> iterator = map.keySet().iterator();
@@ -60,7 +60,7 @@ public class JSON {
 		return builder.toString();
 	}
 
-	private static String _toJSONStringArray(Object object) {
+	private static String toJSONStringArray(Object object) {
 		if (Collection.class.isInstance(object))
 			object = List.class.cast(object).toArray();
 		int count = Array.getLength(object);
@@ -74,7 +74,7 @@ public class JSON {
 		return builder.toString();
 	}
 
-	private static String _toJSONStringPojo(Object object) {
+	private static String toJSONStringPojo(Object object) {
 		StringBuilder builder = new StringBuilder("{");
 		Method[] methods = object.getClass().getMethods();
 		for (Method method : methods) {
@@ -96,21 +96,21 @@ public class JSON {
 		return builder.toString();
 	}
 
-	private static boolean _isJSONObject(String text) {
+	private static boolean isJSONObject(String text) {
 		text = text.trim();
 		return text.startsWith("{") && text.endsWith("}");
 	}
 
-	private static boolean _isJSONArray(String text) {
+	private static boolean isJSONArray(String text) {
 		text = text.trim();
 		return text.startsWith("[") && text.endsWith("]");
 	}
 
-	private static boolean _isEmtry(String text) {
+	private static boolean isEmtry(String text) {
 		return null == text || text.isEmpty();
 	}
 
-	private static Object _parseJSON(String text) {
+	private static Object parseJSON(String text) {
 		text.trim();
 		Stack<String> stack = new Stack<String>();
 		Stack<Object> objects = new Stack<Object>();
@@ -131,7 +131,7 @@ public class JSON {
 				types.push(isMap);
 				if (null != obj)
 					objects.push(obj);
-				obj = _obtain(isMap ? JSONObject.class : JSONArray.class);
+				obj = obtain(isMap ? JSONObject.class : JSONArray.class);
 				pos = idx;
 				break;
 			case ']':
@@ -183,7 +183,7 @@ public class JSON {
 		return obj;
 	}
 
-	private static <T extends Object> T _obtain(Class<T> clazz) {
+	private static <T extends Object> T obtain(Class<T> clazz) {
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {
