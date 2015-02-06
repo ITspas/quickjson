@@ -38,3 +38,15 @@ public class QuickJsonTest {
 }
 
 ```
+`
+Hello World
+null
+A [name=Tom, age=10, address=anhui hfei]
+A [name=Tom, age=10, address=anhui hfei]
+A [name=Tom, age=10, address=anhui hfei]
+{"address":"anhui hefei","name":"Tom","age":11}
+[10,10,102,200]
+{"address":"anhui hefei","age":11,"name":"Tom"}
+["Tom","jack"]
+
+`
