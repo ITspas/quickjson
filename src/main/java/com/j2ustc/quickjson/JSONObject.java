@@ -1,4 +1,4 @@
-package org.itspas.quickjson;
+package com.j2ustc.quickjson;
 
 import java.util.HashMap;
 
